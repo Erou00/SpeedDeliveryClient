@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "scheme": "livraisonClient",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "livraisonClient",
+    "slug": "livraisonClient"
+  }
+}
