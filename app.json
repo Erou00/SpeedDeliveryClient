@@ -5,6 +5,17 @@
       "bundler": "metro"
     },
     "name": "livraisonClient",
-    "slug": "livraisonClient"
+    "slug": "livraisonClient",
+    "extra": {
+      "eas": {
+        "projectId": "87914081-5c1a-4c84-92d0-8334689a7fc1"
+      }
+    },
+    "android": {
+      "package": "com.essahatayoub.livraisonClient"
+    },
+    "ios": {
+      "bundleIdentifier": "y"
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, RefreshControl } from 'react-native'
+import { View, Text, SafeAreaView, RefreshControl, TouchableOpacity } from 'react-native'
 import React, { useCallback, useState } from 'react'
 import { Stack, useLocalSearchParams, useRouter,useSearchParams } from 'expo-router'
 import { COLORS, SIZES, icons } from '../../../constants'
@@ -10,11 +10,12 @@ import Info from '../../../components/colisDetails/info/Info'
 import Commandes from '../../../components/colisDetails/commandes/Commandes'
 import { useEffect } from 'react'
 import { get_pack_by_id } from '../../api/axios_pack'
+import { Ionicons } from '@expo/vector-icons'
 
 
 
 const tabs = ["Info", "Commandes"];
-const ColisDetails = ({item}) => {
+const ColisDetails = () => {
     const {id} = useLocalSearchParams();
     const router = useRouter();
     const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -29,6 +30,7 @@ const ColisDetails = ({item}) => {
         await get_pack_by_id(id).then(({data}) => {
            
             setPack({
+                id:data.data.id,
                 image:data.data.image,
                 name:data.data.name,
                 designation: data.data.designation,
@@ -36,7 +38,10 @@ const ColisDetails = ({item}) => {
                 prixUnitaire: data.data.prixUnitaire,
                 prixTotal:data.data.prixTotal,
                 categorie:data.data.categorie.name, 
+              
             })
+
+            console.log(pack);
           }).catch(err => {
             console.log(err);
           })
@@ -62,7 +67,16 @@ const ColisDetails = ({item}) => {
     
     
             case "Commandes":
-                return  <Commandes/>
+                return  ( 
+                  <>
+                  {(pack) ? 
+                     <Commandes packId={pack.id}  />
+                  :
+                  <Text>No Commandes</Text>
+                  }
+                  
+                  </>
+                )
     
  
             default:
@@ -97,6 +111,19 @@ const ColisDetails = ({item}) => {
             >
 
                     <View style={{paddingHorizontal : SIZES.xSmall,paddingBottom:100}}>
+                    <TouchableOpacity
+          onPress={() => router.back()}
+           style={
+                      { top: 30,
+                        left: 10, position: "absolute",zIndex:1000 }}>
+             <Ionicons
+                    
+                    name="arrow-back-circle"
+                    size={30}
+                    color="#fff"
+                    
+          />
+          </TouchableOpacity>
                            <Top
                                  colisImage={pack.image}
                                  packname={pack.name}

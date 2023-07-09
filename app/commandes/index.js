@@ -107,15 +107,21 @@ const Commandes = () => {
           style={{height: Dimensions.get('window').height / 6}} resizeMode='cover'
           >
 
-          <Ionicons
-                    onPress={() => router.back()}
+
+          <TouchableOpacity
+          onPress={() => router.back()}
+           style={
+                      { top: 30,
+                        left: 10, position: "absolute",zIndex:1000 }}>
+             <Ionicons
+                    
                     name="arrow-back-circle"
                     size={30}
                     color="#fff"
-                    style={
-                      { top: 30,
-                        left: 10, position: "absolute",zIndex:1000 }}
+                    
           />
+          </TouchableOpacity>
+         
               <View style={styles.brandView}>         
               <Text style={styles.brandViewText}>MES COMMANDES</Text>
               </View>

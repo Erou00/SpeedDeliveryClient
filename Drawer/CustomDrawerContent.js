@@ -13,7 +13,7 @@ import { FONT } from '../constants';
 import { useAuth } from '../context/auth';
 
 const CustomDrawerContent = (props) => {
-   const { signOut,user } = useAuth();
+   const { signOut,userInfo } = useAuth();
  
   return ( 
     <View style={{flex: 1}}>
@@ -33,8 +33,9 @@ const CustomDrawerContent = (props) => {
               fontSize: 18,
                fontFamily: FONT.bold,
               marginBottom: 5,
+              textTransform:'uppercase'
             }}>
-            John Doe
+            {userInfo?.firstname+' ' +userInfo?.lastname}
           </Text>
           <View style={{flexDirection: 'row'}}>
             <Text
@@ -43,7 +44,7 @@ const CustomDrawerContent = (props) => {
                 fontFamily: FONT.bold,
                 marginRight: 5,
               }}>
-              280 Coins
+              {userInfo?.amount.toLocaleString('en-US')} MAD
             </Text>
             <FontAwesome5 name="coins" size={14} color="#fff" />
           </View>

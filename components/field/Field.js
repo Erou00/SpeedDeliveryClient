@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
       width: '100%',
       height:50, 
       backgroundColor: 'rgb(220,220, 220)', 
-      marginVertical: 5
+      marginVertical: 1
     },
   label:{
     marginTop:15,

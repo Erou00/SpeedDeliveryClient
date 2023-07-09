@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import { Badge } from '@rneui/themed'
-import { Entypo, FontAwesome } from '@expo/vector-icons'
+import { Entypo, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import { StyleSheet } from 'react-native'
 import { Dimensions } from 'react-native'
 import { COLORS, FONT } from '../../constants'
@@ -63,6 +63,14 @@ const Commande = ({item,deleteCommande}) => {
             <View style={styles.cardBody}>
                 <Text style={styles.colisText}>COLIS: {item.pack.name} </Text>
 
+
+                <View style={styles.phone}>
+                <FontAwesome5 name="user-tag" style={styles.icon1}/>
+                <View>
+                    <Text style={styles.phoneText}>{item.owner}</Text>
+                </View>
+                </View>
+                
                 <View style={styles.phone}>
                 <FontAwesome name="phone-square" style={styles.icon1}/>
                 <View>
@@ -73,7 +81,7 @@ const Commande = ({item,deleteCommande}) => {
                 <View style={styles.address}>
                 <Icon name="location" style={styles.icon1}></Icon>
                 <View>
-                    <Text style={styles.addressText}>{item.address} </Text>
+                    <Text numberOfLines={3} style={styles.addressText}>{item.address} </Text>
                 </View>
                 </View>
 
@@ -151,6 +159,7 @@ const styles = StyleSheet.create({
     addressText:{
       flex:0,
       fontFamily:FONT.chelseaMarket,
+      paddingEnd:5
     },
     phone:{
       flexDirection:"row",

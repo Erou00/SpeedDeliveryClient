@@ -101,6 +101,31 @@ export const get_commande_by_id = async (commande_id) => {
   }
 };
 
+export const get_commande_by_pack_id = async(id) => {
+  try{
+
+    const token = await AsyncStorage.getItem("@user")
+      const baseUrl = "/private/commandes";
+      let url = '';
+      url = `${baseUrl}/commandes-by-packid/${id}`
+      const result = await ApiManager(url, {
+        method: 'GET',
+        //  withCredentials:true,
+        headers: {
+          'content-type': 'application/json',
+          'Access-Control-Allow-Origin':'*',
+          'Authorization': `Bearer ${token}`
+        },
+
+      });
+      return result;
+    } catch (error) {
+      return error.response.data;
+    }
+
+}
+
+
 
 
 export const delete_commande_by_id = async (commande_id) => {

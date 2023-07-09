@@ -12,32 +12,32 @@ const CommandeCard = ({item}) => {
   const router = useRouter();
   
   const __getCompletedIcon = item => {
-    if (item.statut.statut == "Nouvelle" || item.statut.statut == "En cours" ) {
+    if (item.statut.statut == "NOUVELLE" || item.statut.statut == "EN COURS" ) {
       return  <MaterialCommunityIcons name="progress-clock" size={30} color={COLORS.gray} />
-    } else if (item.statut.statut == "Livrée" ) {
+    } else if (item.statut.statut == "LIVREE" ) {
       return <AntDesign name="checkcircle" size={30} color="green" />
-    } else if (item.statut.statut == "Retour" ) {
+    } else if (item.statut.statut == "RETOUR" ) {
       return <MaterialIcons name="cancel" size={30} color="red" />
     }
 
   }
 
   const __getDescriptionStyle = item => {
-    if (item.statut.statut == "En cours") {
+    if (item.statut.statut == "EN COURS") {
       return { fontStyle: 'italic', color: '#808080' }
     }
   }
 
   const __getBorderStyle = statut => {
-    if (statut == "En cours") {
+    if (statut == "EN COURS") {
       return { borderColor: COLORS.gray2 }
     }
 
-    if (statut == "Livrée") {
+    if (statut == "LIVREE") {
       return { borderColor: 'green' } 
     }
 
-    if (statut == "Retour") {
+    if (statut == "RETOUR") {
       return { borderColor: 'red' }
     }
   }
@@ -58,7 +58,7 @@ const CommandeCard = ({item}) => {
               <View style={styles.contentHeader}>
                 <Entypo name="location" size={24} color="black" style={{marginRight:10}} />
                 <View>
-                <Text style={styles.name}>{item.address}</Text>
+                <Text style={styles.name} numberOfLines={3}>{item.address}</Text>
                 </View>
                 
               </View>

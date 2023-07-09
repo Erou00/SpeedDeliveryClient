@@ -4,12 +4,18 @@ import { FlatList } from 'react-native'
 import { TouchableOpacity } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { COLORS, FONT, SIZES } from '../../constants'
+import { useEffect } from 'react'
+import { display_status } from '../../app/api/axios_statut'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
-const states = ['EN STOCK' ,'EN COURS','LIVREE','RETOUR']
+
 const Status = ({tabHandler}) => {
 
+
+  const [states,setStates] = useState([])
     const [activeState,setActiveState] = useState('EN STOCK')
+
     const changeActiveState = (item)=>{
         setActiveState(item);
     }
@@ -19,6 +25,21 @@ const Status = ({tabHandler}) => {
        changeActiveState(item)
     //     console.log(activeState);
     }
+
+    const getStatus = async() =>{
+      const token = await AsyncStorage.getItem("@user") 
+      if (token) {
+        await display_status().then(({data})=>{
+          console.log(data);
+          setStates(data.data) 
+         })
+      }
+     
+    }
+ 
+    useEffect(()=>{
+      getStatus()
+    },[])
   return (
     <View style={styles.tabsContainer}>
     <FlatList 
@@ -26,12 +47,12 @@ const Status = ({tabHandler}) => {
             renderItem={({item}) => (
             <TouchableOpacity
                 style = {styles.tab(activeState,item)}
-                onPress={()=> functionCombined (item)}>
-                <Text style={styles.tabText(activeState,item)}>{item}</Text>
+                onPress={()=> functionCombined (item.statut)}>
+                <Text style={styles.tabText(activeState,item)}>{item.statut}</Text>
             </TouchableOpacity>
             )} 
             showsHorizontalScrollIndicator={false}
-            keyExtractor={item => item}
+            keyExtractor={item => item.id}
             contentContainerStyle= {{columnGap:SIZES.small}}
             horizontal
         

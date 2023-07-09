@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
       flex: 1,
     },
     header: {
-      height: 80,
+      height: 90,
       justifyContent: 'center',
       alignItems: 'center',
       // backgroundColor: '#ccc',
@@ -26,11 +26,11 @@ const styles = StyleSheet.create({
       marginTop:-20,
       zIndex:100,
       paddingHorizontal: 20,
-      paddingTop: 20,
+      paddingTop: 5,
       backgroundColor:COLORS.lightWhite
     },
     label:{
-      marginTop:30,
+      marginTop:5,
       marginBottom:5,
       fontFamily:FONT.medium,
       
@@ -56,6 +56,16 @@ const styles = StyleSheet.create({
     footerText: {
       fontSize: 16,
       fontWeight: 'bold',
+    },
+    inputStyle:{
+      borderRadius: 5,
+      color: '#000',
+      fontWeight:'bold',
+      padding: 5,
+      width: '100%',
+      height:50, 
+      backgroundColor: 'rgb(220,220, 220)', 
+      marginVertical: 5
     },
   })
 

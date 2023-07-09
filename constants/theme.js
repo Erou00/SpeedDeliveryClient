@@ -1,5 +1,5 @@
 const COLORS = {
-  primary: "#312651",
+  primary:    "#312651",
   secondary: "#444262",
   tertiary: "#FF7754",
 
@@ -17,6 +17,7 @@ const FONT = {
   medium: "DMMedium",
   bold: "DMBold",
   chelseaMarket:"chelseaMarket",
+  Caprasimo:"Caprasimo"
 };
 
 const SIZES = {

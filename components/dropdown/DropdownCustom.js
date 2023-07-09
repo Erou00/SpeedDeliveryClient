@@ -40,7 +40,8 @@ const DropdownCustom = ({data,handleChange,id,handleChangeItem}) => {
     <View>
       <Dropdown
       style={styles.dropdown}
-        // label="Select an option"
+    
+         placeholder=''
         selectedTextStyle={styles.selectedTextStyle}
         itemTextStyle={styles.itemTextStyle}
         data={data}

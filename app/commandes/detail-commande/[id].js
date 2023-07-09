@@ -17,7 +17,7 @@ import Pusher from 'pusher-js/react-native';
 import { ActivityIndicator } from 'react-native'
 import { TouchableOpacity } from 'react-native'
 import { Popup, SPSheet } from 'react-native-popup-confirm-toast'
-import { CreateIconSetFromIcoMoon } from '@expo/vector-icons'
+import { CreateIconSetFromIcoMoon, Ionicons } from '@expo/vector-icons'
 import { Toast } from 'react-native-toast-message'
 import { StatusBar } from 'react-native'
 import { popupSuccessMessage, withProgressBar } from '../../../utils/Utils'
@@ -156,7 +156,19 @@ const CommandeDetails = () => {
 
 
             <View >
-
+            <TouchableOpacity
+                onPress={() => router.back()}
+                style={
+                            { top: 30,
+                              left: 10, position: "absolute",zIndex:1000 }}>
+                  <Ionicons
+                          
+                          name="arrow-back-circle"
+                          size={30}
+                          color="#fff"
+                          
+                />
+                </TouchableOpacity>
                         <Header bg={images.menuBg}  headerWidth={5.5}
                           title={'Commande Détail'} textSize={20}/>
                         <Container pad={-50} padHor={12}  >

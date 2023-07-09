@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { View } from 'react-native';
 import EnregistrerBtn from '../../../components/buttons/EnregistrerBtn'
 import Dropdown from '../../../components/dropdown/DropdownCustom'
@@ -23,9 +23,17 @@ import { handleGeocode } from '../../api/axios_geocoding';
 import { popupErrorWithConfirmation, popupSuccessMessage } from '../../../utils/Utils';
 import styles from './ajouter.style';
 
+import BottomSheet, { BottomSheetFlatList, BottomSheetModal, BottomSheetModalProvider, BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useRef } from 'react';
+import { useCallback } from 'react';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { TouchableOpacity } from 'react-native';
+
 
 
 const AddCommande = () => {
+ 
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [latitude,setLatitude] =useState('')
   const [longitude,setLongitude] =useState('')
@@ -49,10 +57,16 @@ const AddCommande = () => {
       .max(200, 'Too Long!')
       .required("merci d'entrer l'adresse")
       ,
+
+      owner: Yup.string()
+      .min(2, 'Too Short!') 
+      .max(100, 'Too Long!')
+      .required("merci d'entrer le nom du titulaire du commande")
+      ,
     
     phone:Yup.number().min(10,'test').required("Merci d'entrer numéro de télèphone"),
   
-    quantite:Yup.number().min(1,'test').max(selectedPack.quantite,'worked').required("Merci d'entrer la quantitée"),
+    quantite:Yup.number().min(1,'test').max(selectedPack.quantite,'la quantité doit être inférieur ou égal '+selectedPack.quantite).required("Merci d'entrer la quantitée"),
     price:Yup.number()
             .min(1,'test')
             .required("merci d'entrer le prix")
@@ -134,8 +148,8 @@ const AddCommande = () => {
 
  
   const handleSubmit = async (values) =>{
-    if (!id) {
-     await handleGeocode(values.address).then((response) => {
+
+    await handleGeocode(values.address).then((response) => {
       const { results } = response.data;
       console.log(results[0].geometry.location);
       if (results[0].geometry.location) {
@@ -156,6 +170,9 @@ const AddCommande = () => {
         return;
         
       });
+
+    if (!id) {
+    
      await add_commande({...values,latitude : latitude , longitude : longitude,client:userInfo.id})
       .then(({data})=>{
         if (data.status === 200) {
@@ -178,93 +195,146 @@ const AddCommande = () => {
     
   }
 
-  return (
-    <View style={styles.container}>
-    <View style={styles.header}>
-      <Text style={styles.title}>AJOUter une commande</Text>
-    </View>
 
-   
-    
+
+  const bottomSheetRef = React.useRef(null);
+
+  const openBottomSheet = () => {
+    bottomSheetRef.current?.present();
+  };
+
+  return (
 
     <Formik enableReinitialize initialStatus={[commande,selectedPack]}
-          initialValues={{
-              owner:'TEST 01',
-              address: commande.address,
-              phone:commande.phone,
-              quantite:String(commande.quantite),
-              price:String(commande.prixUnitaire),
-              pack:selectedPack.id
-          }}
-            validationSchema={DisplayingErrorMessagesSchema}
-            onSubmit={handleSubmit}
-            >
-        {({values,errors,touched,handleChange,
-          setFieldTouched,isValid,handleSubmit})=>(
+    initialValues={{
+        owner:commande.owner,
+        address: commande.address,
+        phone:commande.phone,
+        quantite:String(commande.quantite),
+        price:String(commande.prixUnitaire),
+        pack:selectedPack.id
+    }}
+      validationSchema={DisplayingErrorMessagesSchema}
+      onSubmit={handleSubmit}
+      >
+  {({values,errors,touched,handleChange,
+    setFieldTouched,isValid,handleSubmit})=>(
+<>
+      <View style={styles.container}>
 
+      <View style={styles.header}>
 
-            <>
-            <View style={styles.content}>
-              <Text style={styles.label}>Choissisez une colis:</Text>
+      <TouchableOpacity
+          onPress={() => router.back()}
+           style={
+                      { top: 30,
+                        left: 10, position: "absolute",zIndex:1000 }}>
+             <Ionicons
+                    
+                    name="arrow-back-circle"
+                    size={30}
+                    color="#fff"
+                    
+          />
+          </TouchableOpacity>
+      <Ionicons
+        onPress={() => router.back()}
+        name="arrow-back-circle"
+        size={30}
+        color="#fff"
+        style={
+          { top: 30,
+             left: 10, position: "absolute",zIndex:1000 }}
+      />
+        <Text style={styles.title}>AJOUter une commande</Text>
+      </View>
 
-              <Dropdown data={packs} id={values.pack}
-                     handleChange={handleChange('pack')} 
-                     handleChangeItem={ch} />
-                     {errors.pack &&
-                      <Text style={{fontSize:12,color:'#FF0D10',}}>{errors.pack}</Text>}
+      <View style={styles.content}>
+      <KeyboardAwareScrollView
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}>
+      <Text style={styles.label}>Choissisez une colis:</Text>
+      
+      <Dropdown data={packs} id={values.pack}
+       handleChange={handleChange('pack')} 
+       handleChangeItem={ch} />
+       {errors.pack &&
+        <Text style={{fontSize:12,color:'#FF0D10',}}>{errors.pack}</Text>}
 
-               <View style={{padding:5,marginLeft:'auto'}}>
-                       <Text style={{marginBottom:2,fontWeight:'bold',textAlign:'right',fontStyle:'italic'}} >Prix Unitaire : <Text style={{color:COLORS.secondary}}>{selectedPack.prixUnitaire} DH</Text></Text>
-                       <Text style={{fontWeight:'bold',textAlign:'right',fontStyle:'italic'}} >Quantite : <Text style={{color:COLORS.secondary}}>{selectedPack.quantite}</Text></Text>
+        <View style={{padding:2,marginLeft:'auto'}}>
+                <Text style={{marginBottom:2,fontWeight:'bold',textAlign:'right',fontStyle:'italic'}} >Prix Unitaire : <Text style={{color:COLORS.secondary}}>{selectedPack.prixUnitaire} DH</Text></Text>
+                <Text style={{fontWeight:'bold',textAlign:'right',fontStyle:'italic'}} >Quantite : <Text style={{color:COLORS.secondary}}>{selectedPack.quantite}</Text></Text>
 
-                    </View>
+        </View>
 
-              <Field label="Quantité:" name="quantite" /> 
-              <View style={{padding:5,marginLeft:'auto'}}>
-                      <Text style={{fontWeight:'bold',textAlign:'right',fontStyle:'italic'}} > Prix Total : <Text style={{color:COLORS.secondary}}>{values.price = selectedPack.prixUnitaire  * values.quantite} DH</Text></Text>
-              </View>
+        <Field label="Quantité:" name="quantite" /> 
+        <View style={{padding:2,marginLeft:'auto'}}>
+                <Text style={{fontWeight:'bold',textAlign:'right',fontStyle:'italic'}} > Prix Total : <Text style={{color:COLORS.secondary}}>{values.price = selectedPack.prixUnitaire  * values.quantite} DH</Text></Text>
+        </View>
 
-              {/* <Field label="Nom du titulaire du commande:" name="owner" />  */}
-              <Field label="Télèphone:" name="phone" /> 
-              <Text style={styles.label}>Adresse</Text>
-              { touched.address && errors.address &&
-                      <Text style={{fontSize:12,color:'#FF0D10',}}>{errors.address}</Text>}
+        <Field label="Nom du titulaire du commande:" name="owner" /> 
+        <Field label="Télèphone:" name="phone" /> 
+        <Text style={styles.label}>Adresse:</Text>
+         <TextInput placeholder='' style={styles.inputStyle} onPressIn={openBottomSheet} 
+            value={values.address}
+         />
+           { touched.address && errors.address &&
+                <Text style={{fontSize:12,color:'#FF0D10',}}>{errors.address}</Text>}
+        
 
-            {commande.address && <Text style={styles.address}>Current : {commande.address}</Text> }
-            <GooglePlacesAutocomplete
-              styles={{textInput:{backgroundColor:'rgb(220,220, 220)',color:'#000'}}}
-             // textInputProps={{value: commande.address ? commande.address : ''}} 
-              placeholder='Search'
-              onPress={(data, details = null) => {
-                // handlePlaceSelect(data.description);
-                handleChange('address')(data.description);
-              }}
-              query={{
-                key: 'AIzaSyAsGOSLFI83LZqcFOda1zltJ9DfUuLCHyA',
-                language: 'en',
-              }}
-            />
+</KeyboardAwareScrollView>
 
-
-
-    
-            </View>
-
-            <View style={styles.footer}>
+        </View>
+     
+    </View>
+    <View style={styles.footer}>
             <EnregistrerBtn btnIcon={icons.add} btnText={'ENREGISTRER'} isValid={isValid} handelButton={handleSubmit} />
+    </View>
 
-            </View>
-                    </>
-                  )}
-          
-          </Formik>
-
-
-
-   
-  </View>
+      <BottomSheetModalProvider>
+      <BottomSheetModal
+        ref={bottomSheetRef}
+        snapPoints={['90%', 1]}
+      >
+        {/* Content of the bottom sheet */}
+        <View style={{  padding: 16, backgroundColor: 'white',height:300, marginBottom:5, }}>
+        <AntDesign name="closecircleo" 
+        onPress={() => bottomSheetRef.current.close()}
+        size={20}
+        color="#000"
+        
+        style={
+          { top: 1,
+             right: 18, position: "absolute",zIndex:1000}}
+      />
+          <GooglePlacesAutocomplete
+            placeholder="Search"
+            styles={{
+              textInput:{backgroundColor:'rgb(220,220, 220)',color:'#000'},
+              container:{height:300,marginTop:18}
+            }}
+            onPress={(data, details = null) => {
+              // Handle the selected place
+              handleChange('address')(data.description);
+              bottomSheetRef.current.close();
+            }}
+            query={{
+              key: 'AIzaSyAsGOSLFI83LZqcFOda1zltJ9DfUuLCHyA',
+              language: 'en',
+            }}
+          />
+        </View>
+      </BottomSheetModal>
+      </BottomSheetModalProvider>
+      </>
+    )}
     
-    )
+
+    
+    </Formik>
+ 
+  
+  );
 }
 
 export default AddCommande

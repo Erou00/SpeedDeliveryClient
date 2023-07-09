@@ -98,7 +98,7 @@ const Welcome = ({searchTerm,setSearchTerm,handleClick}) => {
                     </View>
                     <View style={{alignItems:"center"}}>
                       <Text style={{fontFamily:FONT.bold, marginBottom:10}}>Montant</Text>
-                      <Text style={{fontFamily:FONT.chelseaMarket, fontSize:18}}>MAD { userInfo?.amount } </Text> 
+                      <Text style={{fontFamily:FONT.chelseaMarket, fontSize:18}}>{ userInfo?.amount.toLocaleString('en-US') } DH</Text> 
                     </View>
           </CustomCard> 
 

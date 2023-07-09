@@ -1,7 +1,7 @@
-import { View, Text, Image , Pressable, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, Image , Pressable, TextInput, TouchableOpacity, StatusBar, Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
+import { EvilIcons, FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox"
 // import Button from '../components/Button';
 import { COLORS, FONT } from '../../constants';
@@ -12,6 +12,8 @@ import { ScrollView } from 'react-native';
 import { user_login } from '../api/user_auth';
 import { useAuth } from '../../context/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const {width, height} = Dimensions.get('window');
 
 const Login = () => {
 
@@ -55,103 +57,87 @@ const Login = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite}}>
             <View style={{ flex: 1,}}>
-              <View style={styles.avatarContainer}>
-                  <Image
-                    style={styles.avatar}
-                    source={{uri: 'https://img.freepik.com/free-vector/customer-using-mobile-app-tracking-order-delivery_74855-5229.jpg'}}
-                  />
-                </View>
+            <StatusBar
+              backgroundColor={COLORS.primary}
+              barStyle="light-content"
+              hidden={false}
+            />
+            <View style={styles.uppercard}>
+              {/* <Image 
+              style={{width:70,height:70,borderRadius:35}}
+              source={{uri:'https://yt3.ggpht.com/yti/APfAmoG-m3--E1zYY977bOWG0FS_syFGSbqjyAbh6dDi=s88-c-k-c0x00ffffff-no-rj-mo'}}   
+              />*/}
+              <Text 
+              style={{color:COLORS.primary,
+              fontFamily: FONT.Caprasimo,
+              fontWeight:'bold',
+              fontSize:40,
+              marginLeft:-60
+              }}>
+                SPEED 
+              </Text> 
+              <Text style={{color:COLORS.tertiary,fontFamily: FONT.Caprasimo,
+              fontWeight:'bold',
+              fontSize:40,marginLeft:60}}>DELIVERY</Text>
+            </View>
                <ScrollView showsVerticalScrollIndicator={false}>
-
+            
         
-                <View style={{ marginVertical: 22, marginHorizontal: 22  }}>
-                    <Text style={{
-                        fontSize: 22,
-                        marginVertical: 12,
-                        color: COLORS.black,
-                        fontFamily:FONT.bold
-                    }}>
-                        Hi Welcome Back ! 👋
-                    </Text>
 
-                    <Text style={{
-                        fontSize: 16,
-                        fontFamily:FONT.medium,
-                        color: COLORS.black
-                    }}>Hello again you have been missed!</Text>
-                </View>
-
-                <View style={{ marginBottom: 12, marginHorizontal: 22  }}>
+                <View style={{ marginVertical: 8, marginHorizontal: 22  }}>
                     {message !== '' &&
                       <Text 
                       style={styles.errMsg}>{message}</Text>
                     }
-                    <Text style={{
-                        fontSize: 16,
-                        fontWeight: 400,
-                        marginVertical: 8,
-                        fontFamily:FONT.bold
 
-                    }}>Username</Text>
 
-                    <View style={{
-                        width: "100%",
-                        height: 48,
-                        borderColor: COLORS.black,
-                        borderWidth: 1,
-                        borderRadius: 8,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        paddingLeft: 22,
-                        
-                    }}>
-                        <TextInput
-                            value={username}
-                            onChangeText={(text) => {setUsername(text)}}
-                            placeholder='Username'
-                            placeholderTextColor={COLORS.black}
-                            style={{
-                                width: "100%",
-                                fontFamily:FONT.bold
- 
-                            }}
-                        />
+                    <View style={styles.inputContainer}>
+                    <View style={styles.inputIconView}>
+                    <FontAwesome name="user-circle-o"
+                        style={{
+                          color: '#fff',
+                          fontSize: 18,
+                          textAlign: 'center',
+                        }}
+                      />
                     </View>
-                </View>
-
-                <View style={{ marginBottom: 12, marginHorizontal: 22  }}>
-                    <Text style={{
-                        fontSize: 16,
-                        fontWeight: 400,
-                        marginVertical: 8,
-                        fontFamily:FONT.bold
-
-                    }}>Mot de passe</Text>
-
-                    <View style={{
-                        width: "100%",
-                        height: 48,
-                        borderColor: COLORS.primary,
-                        borderWidth: 1,
-                        borderRadius: 8,
-                        alignItems: "center",
-                        justifyContent: "center", 
-                        paddingLeft: 22
-                    }}>
-                        <TextInput
-                            value={password}
-                            onChangeText={(text) => {setPassword(text)}}
-                            placeholder='Enter votre mot de passe'
-                            placeholderTextColor={COLORS.black}
-                            secureTextEntry={isPasswordShown}
-                            style={{
-                                width: "100%",
-                                fontFamily:FONT.bold
-
-                            }}
-                        />
-
-                        <TouchableOpacity
+                    <TextInput
+                      style={styles.inputs}
+                      placeholder="Username"
+                      keyboardType="default"
+                      underlineColorAndroid="transparent"
+                      onChangeText={value => {
+                        setUsername(value);
+                      }}
+                      value={username}
+                      placeholderTextColor={COLORS.liteBlack}
+                    />
+                    </View>   
+                
+                    <View style={styles.inputContainer}>
+                    <View style={styles.inputIconView}>
+                    <MaterialIcons name="lock"
+                        style={{
+                          color: '#fff',
+                          fontSize: 18,
+                          textAlign: 'center',
+                        }}
+                      />
+                    </View>
+                    <TextInput
+                      style={styles.inputs}
+                    
+                      underlineColorAndroid="transparent"
+                      onChangeText={value => {
+                        setPassword(value);
+                      }}
+                      value={password}
+                      placeholder='Mot de passe'
+                      placeholderTextColor={COLORS.black}
+                      secureTextEntry={isPasswordShown}
+                      
+                    />
+                    <TouchableOpacity
                             onPress={() => setIsPasswordShown(!isPasswordShown)}
                             style={{
                                 position: "absolute",
@@ -160,45 +146,34 @@ const Login = () => {
                         >
                             {
                                 isPasswordShown == true ? (
-                                    <Ionicons name="eye-off" size={24} color={COLORS.black} />
+                                    <Ionicons name="eye-off" size={24} color={COLORS.primary} />
                                 ) : (
-                                    <Ionicons name="eye" size={24} color={COLORS.black} />
+                                    <Ionicons name="eye" size={24} color={COLORS.primary} />
                                 )
                             }
 
                         </TouchableOpacity>
-                    </View>
-                </View>
+                    </View> 
 
-                <View style={{
-                    flexDirection: 'row',
-                    marginVertical: 6,
-                    marginHorizontal: 22 
-                }}>
-                   
 
-    
-                </View>
-
-                <LoginBtn
-                    title="Login"
-                    filled
-                    style={{
-                        marginTop: 18,
-                        marginBottom: 4,
-                        marginHorizontal: 22 ,
-                        
-                    }}
-
+                    <TouchableOpacity
+                    style={styles.btn}
                     onPress={onSubmit}
-                />
+                    >
+                    <Text style={styles.btnText}>Se Connecter</Text>
+                    </TouchableOpacity>
+                 
+                </View>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20, marginHorizontal: 22  }}>
+                
+
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 8, marginHorizontal: 22  }}>
                     <View
                         style={{
                             flex: 1,
                             height: 1,
-                            backgroundColor: COLORS.grey,
+                            backgroundColor: COLORS.secondary,
                             marginHorizontal: 10
                         }}
                     />
@@ -207,7 +182,7 @@ const Login = () => {
                         style={{
                             flex: 1,
                             height: 1,
-                            backgroundColor: COLORS.grey,
+                            backgroundColor: COLORS.secondary,
                             marginHorizontal: 10
                         }}
                     />
@@ -227,7 +202,7 @@ const Login = () => {
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexDirection: 'row',
-                            height: 52,
+                            height: 50,
                             borderWidth: 1,
                             borderColor: COLORS.grey,
                             marginRight: 4,
@@ -251,7 +226,7 @@ const Login = () => {
                 <View style={{
                     flexDirection: "row",
                     justifyContent: "center",
-                    marginVertical: 22
+                    marginVertical: 10
                 }}>
                     <Text style={{ fontSize: 16, color: COLORS.black }}>Don't have an account ? </Text>
                     <Pressable
@@ -274,34 +249,66 @@ const Login = () => {
 
 
 const styles = StyleSheet.create({
-  avatarContainer: {
-    marginTop: 10,
+  uppercard: {
+    height: height / 3,
+    backgroundColor : COLORS.theme,
+    borderBottomLeftRadius: height / 8,
+    justifyContent: 'center',
     alignItems: 'center',
-
-    width: "100%",
-    height: 180,
-    shadowColor: '#000',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 1,
-    position:'relative',
-  },
-  avatar: {
-    position:'absolute',
-    width: "100%",
-    height: "100%",
-    // borderRadius: 50,
   },
 
+  inputs: {
+    borderBottomColor: COLORS.white,
+    flex: 1,
+    color: COLORS.liteBlack,
+    paddingLeft: 10,
+    fontFamily : FONT.bold,
+  },
+  inputContainer: {
+    borderRadius: 30,
+    height:48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+    marginBottom:10,
+    elevation: 2,
+  },
+  inputIconView: {
+    width: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor : COLORS.primary,
+    height: '100%',
+    borderRadius: 30,
+    alignSelf: 'center',
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    elevation: 2,
+  },
   errMsg:{
 
         fontSize:18,
         color:'red',
         fontFamily:FONT.bold,
-        textAlign:'center'
+        textAlign:'center',
+        marginVertical:6
 
-  }
+  },
+    btnText: {
+    color: '#fff',
+    fontFamily : FONT.bold,
+    fontSize: 14,
+    marginTop: 2,
+    },
+  btn: {
+    backgroundColor : COLORS.primary,
+    width: '100%',
+    height: 50,
+    borderRadius: 30,
+    elevation: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
 });
 export default Login

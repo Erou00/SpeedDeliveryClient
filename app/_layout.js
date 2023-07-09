@@ -16,7 +16,7 @@ const _layout = () => {
     DMMedium : require('../assets/fonts/DMSans-Medium.ttf'),
     DMRegular : require('../assets/fonts/DMSans-Regular.ttf'),
     chelseaMarket : require('../assets/fonts/chelsea-market-regular.ttf'),
-    
+    Caprasimo : require('../assets/fonts/Caprasimo-Regular.ttf'),
   })
 
 

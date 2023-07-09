@@ -7,34 +7,35 @@ import { TouchableOpacity } from 'react-native'
 import { Alert } from 'react-native'
 import { Badge } from '@rneui/themed'
 import CommandeList from './CommandeList'
+import { get_commande_by_pack_id } from '../../../app/api/axios_command'
+import { useEffect } from 'react'
 
 
-const data = [
-  { id: 1, num: 1, month: 'Sep' },
-  { id: 2, num: 2, month: 'Jan' },
-  { id: 3, num: 3, month: 'Aug' },
-  { id: 4, num: 4, month: 'Dec' },
-  { id: 5, num: 5, month: 'Jul' },
-  { id: 6, num: 6, month: 'Oct' },
-  { id: 7, num: 7, month: 'Sep' },
-  { id: 8, num: 8, month: 'Jan' },
-  { id: 9, num: 9, month: 'May' },
-]
 
-
-const Commandes = () => {
-  const [commandeList, setcommandeList] = useState(data)
+const Commandes = ({packId}) => {
+  const [commandesList, setCommandesList] = useState([])
 
   showAlert = viewId => {
     Alert.alert('alert', 'commande clicked ' + viewId)
   }
+
+  const getStatus = async() =>{
+    await get_commande_by_pack_id(packId).then(({data})=>{
+     console.log(data);
+     setCommandesList(data.data) 
+    })
+ }
+
+ useEffect(()=>{
+   getStatus()
+ },[])
   return (
     <View style={styles.container}>
         <View style={styles.commandeList}>
 
-          {data.map((item) => (
+          {commandesList.map((item,index) => (
 
-             <CommandeList key={item.id} item={item}/>
+             <CommandeList key={item.id} item={item} index={index} />
 
           ))
 
